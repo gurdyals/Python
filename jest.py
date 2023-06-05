@@ -75,6 +75,7 @@ def prnt_row15( row ):
 ######################     Built-IN Utilities     ######################
 import argparse		# for parsing Command line Arguments
 import csv		# 11, 12, 13
+import calendar         # 0
 import inspect		# for inspecting variables and program code
 import locale		# 11
 import os		# for OS related utilities     # 5
@@ -116,7 +117,9 @@ print ( "\n" )
 def main(argv):
 # def main():
     print("argv[1]: ", argv, argv[1])
+    print(f'argv[1]: , {argv=} {argv[0]=} {argv[1]=}')
     print("type(argv[1]): ", type(argv), type(argv[1]))
+    print(f'type(argv[1]): , {type(argv)=} {type(argv[0])=} {type(argv[1])=}')
 
 
 
@@ -720,10 +723,12 @@ def main(argv):
       print ( argv )
       print ( argv, " : Run a SHELL command in SHELL : " )
     #21.)    .         .         .         .         .         .    20191120
+      # NOT sure if find is running correctly
       # from subprocess import run
 
       def bash(command):
-          run(command.split())
+          print(f'{command=}')                 # Added on 20230528
+          run(command.split(), shell=True)
 
       string = 'find / -name ddddddsdsd  2>/dev/null'
       print ( string )
@@ -913,6 +918,14 @@ def main(argv):
       OfileName = 'Meter.csv'
       SfileName = 'some.csv'
 
+    # Added on 20230527
+      print(f'\nFile Names: \n{FileName=} \n{OfileName=} \n{SfileName=}\n')                        # Added on 20230527
+      subprocess.call(["ls -alrt {} {} {}".format(FileName , OfileName , SfileName)], shell=True)  # Added on 20230527
+      print("\n")                                                                                  # Added on 20230527
+      subprocess.call(["ls -alrt " + FileName + ' ' + OfileName + ' ' + SfileName], shell=True)    # Added on 20230527
+      print("\n")                                                                                  # Added on 20230527
+    # Added on 20230527
+
       with open(FileName, newline='') as csvfile, open(OfileName, 'w', newline='') as csvOfile:
           each_row = csv.reader(csvfile, delimiter=',' ) #, quotechar='|')
     #       out_row = csv.writer( csvOfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL )
@@ -922,7 +935,10 @@ def main(argv):
 
           for row in each_row:
               if each_row.line_num == 1:
-                  out_row.writerow( prnt_header( row ).split(',') + [ '  AMT' + RS_per_unit ] + [ row[10] ] )
+              # Changed on 20230528
+                #   out_row.writerow( prnt_header( row ).split(',') + [ '  AMT' + RS_per_unit ] + [ row[10] ] ) # Commented 20230528
+                  out_row.writerow( prnt_header( row ).split(',') + [ '  AMT' + RS_per_unit ] )                 # Added 20230528
+              # Changed on 20230528
                   continue
 
               row3 = row[3].strip(' -')
@@ -977,6 +993,14 @@ def main(argv):
 
           print( "Please check the FILE : ", OfileName )
           print( "Please check the FILE : ", SfileName )
+
+    # Added on 20230528 from subprocess import run
+          print(f'\nFile Names: \n{FileName=} \n{OfileName=} \n{SfileName=}\n')            # Added on 20230528
+          run(["ls -alrt {} {} {}".format(FileName , OfileName , SfileName)], shell=True)  # Added on 20230528
+          print("\n")                                                                      # Added on 20230528
+          run(["ls -alrt " + FileName + ' ' + OfileName + ' ' + SfileName], shell=True)    # Added on 20230528
+          print("\n")                                                                      # Added on 20230528
+    # Added on 20230528
 
           print( " cd  /home/files/PY/Work ;" )
           print( " ( egrep -n -C 5 '\----------' some.csv ; tail -n -5 some.csv ) | less -i ;" )
@@ -1411,6 +1435,35 @@ def main(argv):
       print ( argv, " : @Twitter https://twitter.com/RealBenjizo/status/1654227593732804609 " )
       pass  # DELETE
     #00.)    .         .         .         .         .         .    10101010
+      # Added on 20230604
+      # Python program to display calendar of
+      import calendar
+
+      # Dt = str( datetime.today() )
+      # Dt = datetime.now()
+      # Dt = datetime.today()
+      Dt = date.today()
+
+      print(f"{Dt=} {type(Dt)=}\n{Dt.year=} {type(Dt.year)=} {Dt.month=} {type(Dt.month)=} {Dt.day=} {type(Dt.day)=}")
+      print("\n\n\n\n\n\n\n\n\n\n\n\n")
+
+      # Dt.year := argv[2]
+      # Dt.month := argv[3]
+
+      if len(argv) >= 4:
+          print(f"if len(argv) >= 4:\n{Dt.year=} {Dt.month=} {argv[2]=} {argv[3]=}")
+          print("\n\n\n\n\n\n\n\n\n\n\n\n")
+          print(calendar.month(int(argv[2]), int(argv[3])))
+      elif len(argv) >= 3:
+          print(f"elif len(argv) >= 3\n{Dt.year=} {type(Dt.year)=} {argv[2]=} {type(argv[2])=}")
+          print("\n\n\n\n\n\n\n\n\n\n\n\n")
+          print(calendar.calendar(int(argv[2])))
+      else:
+          print(f"else:\n{len(argv)=} {type(len(argv))=} {Dt.year=} {type(Dt.year)=} {Dt.month=} {type(Dt.month)=}")
+          print("\n\n\n\n\n\n\n\n\n\n\n\n")
+          print(calendar.month(Dt.year, Dt.month))
+
+      # Added on 20230604
 
     #00.)    0         0         0         0         0         0    10101010
 
@@ -1473,6 +1526,8 @@ def main(argv):
       for i in w2clist:
           print ( "{0:^28} : {1}".format( i[0], CnvDate( i[1] ).strftime(" %d %B, %Y - %A") ) )
       print()
+      print(f'{i=} {argv=} \nProgram is quitting now')
+      sys.exit()    # Added on 20230528
 
 
 print ( '\n\t STANDARD DETAILS\n1. SYS.ARGV       : ', argv, ',  # of args :', len(argv) )
@@ -1487,26 +1542,27 @@ print ( '2. SYS OS.ENVIRON :  os.environ["PWD"] := ', os.environ['PWD'] )
 if __name__ == "__main__":
   print("Hey I am in __name__ == __main__", end="\n\n\n*****\n\n")
   print("argv: ", argv, len(argv))
+  print(f'{argv=} {argv[0]=} {argv[1]=} {len(argv)=}')
   print(" __import__(name, globals=None, locals=None, fromlist=(), level=0)¶")
   print("spam = __import__('spam', globals(), locals(), [], 0)")
 
   if argv[1] >= '0':
       main(argv)
   else:
-    for i in range(38):
-        print(f"{i:} argv[{i}]", type(i))
-  #      __import__(testing, globals=None, locals=None, fromlist=(), level=0)
+    for i in range(99):
+        print(f"{i=} argv[{i=}] {type(i)=}")
+        print("__import__(testing, globals=None, locals=None, fromlist=(), level=0)")
 
-        print(type(i))
         argv[1] = str(i)
+        print(f'{i=} {argv=} {argv[0]=} {argv[1]=} {str(i)=} {type(i)=}')
 
         try:
           main(argv)
         except:
-          print(f"{argv:} Error raised and I'm in except:")
+          print(f"{argv=} Error raised and I'm in except:")
 
         finally:
-          print(f"{argv:} I'm in finally:", end="\n\n\n\n\n\n\n\n\n\n\n\n")
+          print(f"{argv=} I'm in finally:", end="\n\n\n\n\n\n\n*******\n\n\n\n\n")
           # subprocess.call(['/bin/bash', 'read -t 30'], shell=True)
           # subprocess.call('read 30', shell=True, timeout=11)
           time.sleep(11)
