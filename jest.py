@@ -76,9 +76,14 @@ def prnt_row15( row ):
 import argparse		# for parsing Command line Arguments
 import csv		# 11, 12, 13
 import calendar         # 0
+import hashlib          # 19
+import heapq            # 34
 import inspect		# for inspecting variables and program code
 import locale		# 11
+import logging          # 39
 import os		# for OS related utilities     # 5
+import pdb              # 40
+import random           # 29
 import sys		# 13
 import subprocess
 import time
@@ -88,9 +93,11 @@ from datetime      import datetime          # for datetime related
 from datetime      import timedelta
 from dateutil      import parser            # parser for date
 from dateutil      import relativedelta as rdelta
-from dateutil.parser import parse   # 11, 12
+from dateutil.parser import parse           # 11, 12
+from functools     import reduce            # 35
 from subprocess    import check_output      # for Shell Commands
 from subprocess    import run
+from string        import Template          # 28
 from sys           import argv              # command line arguments
 
 ######################     Built-IN Utilities     ######################
@@ -1429,12 +1436,124 @@ def main(argv):
 
 
 
+    elif argv[1] == '39':
+      print ( argv )
+      print ( argv, " : @Twitter https://twitter.com/RealBenjizo/status/1666893595616452609 " )
+    #39.)    .         .         .         .         .         .    20230609
+      import logging
+      logger = logging.getLogger(__name__)
+      FORMAT = "[%(asctime)s %(levelname)s#  %(name)s %(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
+      F_NAME = argv[0].split('.')[0] + '.log'
+      print(f"{F_NAME=}")
+#      if len(argv) >= 5:
+      if F_NAME[:4].upper() == 'TEST':
+        logging.basicConfig(format=FORMAT)
+      else:
+#        logging.basicConfig(format=FORMAT, filename='testing.log')
+        logging.basicConfig(format=FORMAT, filename=F_NAME)
+      logger.setLevel(logging.DEBUG)
+
+      def outer_func(x):
+          def inner_func():
+              return x
+          x -= 2
+          return inner_func()
+
+      print(outer_func(5))
+
+      print(f"Output:")
+      print(f"a.")
+      print(f"b.")
+      print(f"c.")
+      print(f"d.")
+
+      def outer_func(x):
+          logger.info(f'your message {F_NAME=}') 
+          logger.info('your message') 
+          print(f"{x=}")
+          logger.debug(f"{x=}")
+          def inner_func():
+              print(f"{x=}")
+              logger.debug(f"{x=}")
+              return x
+          print(f"{x=}")
+          logger.debug(f"{x=}")
+          x -= 2
+          print(f"{x=}")
+          logger.debug(f"{x=}")
+          return inner_func()
+
+      print(outer_func(5))
+
+    #39.)    0         0         0         0         0         0    20230609
+
+
+
+
+
+
+
+    elif argv[1] == '40':
+      print ( argv )
+      print ( argv, " : @Twitter https://twitter.com/RealBenjizo/status/1667926051345817609 " )
+    #40.)    .         .         .         .         .         .    20230611
+      pdb.set_trace()
+      def outer_func(x):
+          y = 1 + x
+          def inner_func():
+              x = 2
+              def inner_inner():
+                  x = 3
+                  return x + y
+              return inner_inner
+          return inner_func
+
+      results = outer_func(4)
+      my_results = results()
+      print(my_results() + 2)
+
+      print(f"Output:")
+      print(f"a. 8")
+      print(f"b. 5")
+      print(f"c. 10")
+      print(f"d. 4")
+
+    #40.)    0         0         0         0         0         0    20230611
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#####    elif argv[1] == '0':
+#####      print ( argv )
+#####      print ( argv, " : This is NOT Yet Ready " )  # DELETE
+#####      print ( argv, " : @Twitter https://twitter.com/RealBenjizo/status/1654227593732804609 " )
+#####      pass  # DELETE
+#####    #00.)    .         .         .         .         .         .    10101010
+
+#####    #00.)    0         0         0         0         0         0    10101010
+
+
+
+
+
+
+
     elif argv[1] == '0':
       print ( argv )
       print ( argv, " : This is NOT Yet Ready " )  # DELETE
       print ( argv, " : @Twitter https://twitter.com/RealBenjizo/status/1654227593732804609 " )
       pass  # DELETE
-    #00.)    .         .         .         .         .         .    10101010
+    #00.)    .         .         .         .         .         .    20230604
       # Added on 20230604
       # Python program to display calendar of
       import calendar
@@ -1465,7 +1584,7 @@ def main(argv):
 
       # Added on 20230604
 
-    #00.)    0         0         0         0         0         0    10101010
+    #00.)    0         0         0         0         0         0    20230604
 
 
 
@@ -1545,6 +1664,9 @@ if __name__ == "__main__":
   print(f'{argv=} {argv[0]=} {argv[1]=} {len(argv)=}')
   print(" __import__(name, globals=None, locals=None, fromlist=(), level=0)¶")
   print("spam = __import__('spam', globals(), locals(), [], 0)")
+
+  F_NAME = argv[0].split('.')[0] + '.log'
+  print(f"{F_NAME=}")
 
   if argv[1] >= '0':
       main(argv)
